@@ -5,12 +5,29 @@ const cors = require('cors'); // Import CORS middleware
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+
 app.use(cors({
     origin: 'https://pckle4.github.io', // Allow only your frontend origin
-    methods: ['GET', 'POST', 'DELETE'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type'] // Allowed headers
+    methods: ['GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type']
 }));
+
+// SSE route
+app.get('/stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', 'https://pckle4.github.io'); // Allow your frontend origin
+
+    // Add client to the list
+    clients.push(res);
+
+    // Remove client on close
+    req.on('close', () => {
+        const index = clients.indexOf(res);
+        if (index !== -1) clients.splice(index, 1);
+    });
+});
 app.use(bodyParser.json());
 // In-memory storage
 let teams = [];
