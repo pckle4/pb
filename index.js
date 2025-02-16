@@ -1,15 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-require('dotenv').config();
+const cors = require('cors'); // Import CORS middleware
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors()); // Enable CORS
+app.use(cors({
+    origin: 'https://pckle4.github.io', // Allow only your frontend origin
+    methods: ['GET', 'POST', 'DELETE'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type'] // Allowed headers
+}));
 app.use(bodyParser.json());
-
 // In-memory storage
 let teams = [];
 let matchData = {
