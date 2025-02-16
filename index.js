@@ -30,6 +30,11 @@ function publishUpdate() {
     });
 }
 
+// Root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the Pickleball Match Tracker API');
+});
+
 // SSE route
 app.get('/stream', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
