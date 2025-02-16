@@ -3,7 +3,7 @@ let teams = [];
 
 async function loadTeams() {
     try {
-        const response = await fetch('/api/teams');
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/teams');
         const data = await response.json();
         teams = data;
         updateTeamSelects();
@@ -51,8 +51,7 @@ function updateTeamsList() {
         const teamDiv = document.createElement('div');
         teamDiv.className = 'team-item';
         teamDiv.innerHTML = `
-            <span>${team}</span>
-            <button onclick="deleteTeam('${team}')" class="delete-team">×</button>
+            ${team} <button onclick="deleteTeam('${team}')">×</button>
         `;
         teamsList.appendChild(teamDiv);
     });
@@ -65,7 +64,7 @@ async function addTeam() {
     if (!teamName) return;
 
     try {
-        const response = await fetch('/api/teams', {
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/teams', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +91,7 @@ async function deleteTeam(team) {
     if (!confirm(`Are you sure you want to delete team "${team}"?`)) return;
 
     try {
-        const response = await fetch(`/api/teams/${encodeURIComponent(team)}`, {
+        const response = await fetch(`https://pb-beta-ten.vercel.app/api/teams/${encodeURIComponent(team)}`, {
             method: 'DELETE'
         });
 
@@ -115,21 +114,19 @@ function addMatchField() {
     const div = document.createElement('div');
     div.className = 'match-input-group';
     div.innerHTML = `
-        <select class="upcoming-team1 team-select">
-            <option value="">Select Team</option>
+        <select class="upcoming-team1">
             ${teams.map(team => `<option value="${team}">${team}</option>`).join('')}
         </select>
-        <span style="font-family: 'Shadows Into Light'">vs</span>
-        <select class="upcoming-team2 team-select">
-            <option value="">Select Team</option>
+        vs
+        <select class="upcoming-team2">
             ${teams.map(team => `<option value="${team}">${team}</option>`).join('')}
         </select>
-        <input type="time" class="upcoming-time">
-        <select class="upcoming-court" style="padding: 0.5rem">
+        <input type="time" class="upcoming-time" />
+        <select class="upcoming-court">
             <option value="1">Court 1</option>
             <option value="2">Court 2</option>
         </select>
-        <button type="button" class="remove-match">×</button>
+        <button class="remove-match">×</button>
     `;
     document.getElementById('upcomingMatches').appendChild(div);
 }
@@ -174,7 +171,7 @@ async function saveCourtData(courtNumber) {
     };
 
     try {
-        const response = await fetch('/api/update-match', {
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -201,7 +198,7 @@ async function saveNextMatch() {
     const nextMatch = document.getElementById('nextMatch').value;
 
     try {
-        const response = await fetch('/api/update-match', {
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -226,7 +223,7 @@ async function saveNextMatch() {
 async function saveAllData() {
     const btn = document.querySelector('.save-all');
     try {
-        const response = await fetch('/api/update-match', {
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -270,11 +267,10 @@ function showErrorFeedback(button) {
     }, 2000);
 }
 
-
 // Load initial data
 async function loadInitialData() {
     try {
-        const response = await fetch('/api/match-data');
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/match-data');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         updateAdminForm(data.match_data);
@@ -307,29 +303,19 @@ function updateAdminForm(data) {
         const div = document.createElement('div');
         div.className = 'match-input-group';
         div.innerHTML = `
-            <select class="upcoming-team1 team-select">
-                <option value="">Select Team</option>
-                ${teams.map(team => `
-                    <option value="${team}" ${match.team1 === team ? 'selected' : ''}>
-                        ${team}
-                    </option>
-                `).join('')}
+            <select class="upcoming-team1">
+                ${teams.map(team => `<option value="${team}">${team}</option>`).join('')}
             </select>
-            <span style="font-family: 'Shadows Into Light'">vs</span>
-            <select class="upcoming-team2 team-select">
-                <option value="">Select Team</option>
-                ${teams.map(team => `
-                    <option value="${team}" ${match.team2 === team ? 'selected' : ''}>
-                        ${team}
-                    </option>
-                `).join('')}
+            vs
+            <select class="upcoming-team2">
+                ${teams.map(team => `<option value="${team}">${team}</option>`).join('')}
             </select>
-            <input type="time" class="upcoming-time" value="${match.time || ''}">
-            <select class="upcoming-court" style="padding: 0.5rem">
+            <input type="time" class="upcoming-time" value="${match.time || ''}" />
+            <select class="upcoming-court">
                 <option value="1" ${match.court === '1' ? 'selected' : ''}>Court 1</option>
                 <option value="2" ${match.court === '2' ? 'selected' : ''}>Court 2</option>
             </select>
-            <button type="button" class="remove-match">×</button>
+            <button class="remove-match">×</button>
         `;
         upcomingContainer.appendChild(div);
     });
@@ -350,7 +336,7 @@ document.addEventListener('click', (e) => {
         const courtNumber = e.target.dataset.court;
         saveCourtData(courtNumber);
     }
-    if (e.target.classList.contains('next-match-save')){
+    if (e.target.classList.contains('next-match-save')) {
         saveNextMatch();
     }
 });
@@ -358,9 +344,8 @@ document.addEventListener('click', (e) => {
 // Load initial data when page loads
 window.addEventListener('load', loadInitialData);
 
-//load teams on load
+// Load teams on load
 window.addEventListener('load', loadTeams);
-
 
 function getRandomTeamColor() {
     const colors = ['#FF6B6B30', '#4ECDC430', '#FFE66D30', '#FF9F1C30', '#9B59B630'];
