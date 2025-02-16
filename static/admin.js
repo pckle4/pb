@@ -69,7 +69,7 @@ async function addTeam() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ team: teamName })
+            body: JSON.stringify({ team: teamName }),
         });
 
         if (response.ok) {
@@ -92,7 +92,7 @@ async function deleteTeam(team) {
 
     try {
         const response = await fetch(`https://pb-beta-ten.vercel.app/api/teams/${encodeURIComponent(team)}`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
 
         if (response.ok) {
@@ -138,16 +138,16 @@ function getCurrentFormData() {
             team1: document.getElementById('court1team1').value,
             team2: document.getElementById('court1team2').value,
             servingTeam: document.getElementById('court1servingTeam').value,
-            status: document.getElementById('court1status').value
+            status: document.getElementById('court1status').value,
         },
         court2: {
             team1: document.getElementById('court2team1').value,
             team2: document.getElementById('court2team2').value,
             servingTeam: document.getElementById('court2servingTeam').value,
-            status: document.getElementById('court2status').value
+            status: document.getElementById('court2status').value,
         },
         nextMatch: document.getElementById('nextMatch').value,
-        upcoming: []
+        upcoming: [],
     };
 
     document.querySelectorAll('.match-input-group').forEach(match => {
@@ -155,7 +155,7 @@ function getCurrentFormData() {
             team1: match.querySelector('.upcoming-team1').value,
             team2: match.querySelector('.upcoming-team2').value,
             time: match.querySelector('.upcoming-time').value,
-            court: match.querySelector('.upcoming-court').value
+            court: match.querySelector('.upcoming-court').value,
         });
     });
 
@@ -167,7 +167,7 @@ async function saveCourtData(courtNumber) {
     const btn = document.querySelector(`[data-court="${courtNumber}"] .court-save`);
     const data = getCurrentFormData();
     const courtData = {
-        [`court${courtNumber}`]: data[`court${courtNumber}`]
+        [`court${courtNumber}`]: data[`court${courtNumber}`],
     };
 
     try {
@@ -176,7 +176,7 @@ async function saveCourtData(courtNumber) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(courtData)
+            body: JSON.stringify(courtData),
         });
 
         if (response.status === 401) {
@@ -203,7 +203,7 @@ async function saveNextMatch() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ nextMatch })
+            body: JSON.stringify({ nextMatch }),
         });
 
         if (response.status === 401) {
@@ -228,7 +228,7 @@ async function saveAllData() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(getCurrentFormData())
+            body: JSON.stringify(getCurrentFormData()),
         });
 
         if (response.status === 401) {
