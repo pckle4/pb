@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify, Response
+from flask_cors import CORS  # Import CORS
 import os
 from datetime import datetime
 import json
@@ -6,9 +7,8 @@ import queue
 import threading
 
 app = Flask(__name__)
-# Use environment variable for secret key
+CORS(app)  # Enable CORS for all routes
 app.secret_key = os.environ.get("SESSION_SECRET", "default_secret_key")
-
 # In-memory storage
 _teams = []
 _match_data = {
