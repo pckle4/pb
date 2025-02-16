@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pickleball Match Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comic+Neue&family=Luckiest+Guy&family=Poppins&family=Rubik+Bubbles&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="admin-login">
+        <form class="login-form" method="POST">
+            <div class="login-header">🔐 Admin Login</div>
+            <input type="password" name="password" class="login-input" placeholder="Enter Password" required>
+            <button type="submit" class="login-button">Login</button>
+            {% if error %}
+            <div class="login-error">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>
