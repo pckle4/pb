@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Pickleball Match Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comic+Neue&family=Luckiest+Guy&family=Poppins&family=Rubik+Bubbles&family=Shadows+Into+Light&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Updated CSS Path -->
+    <link rel="stylesheet" href="/pb/static/style.css">
 </head>
 <body>
     <div class="admin-panel show">
         <div class="admin-header">🎾 Admin Controls</div>
-
         <!-- Team Management Section -->
         <div class="team-management">
             <h3>Team Management</h3>
@@ -23,7 +23,6 @@
                 <div id="teamsList" class="teams-grid"></div>
             </div>
         </div>
-
         <form class="admin-form" id="matchForm">
             <!-- Court 1 Controls -->
             <div class="court-control" data-court="1">
@@ -59,7 +58,6 @@
                     Save Court 1 💾
                 </button>
             </div>
-
             <!-- Court 2 Controls -->
             <div class="court-control" data-court="2">
                 <h3 class="court-header">Court 2 🏸</h3>
@@ -94,7 +92,6 @@
                     Save Court 2 💾
                 </button>
             </div>
-
             <!-- Next Match Section -->
             <div class="next-match-section">
                 <h3 class="section-header">Next Match 🎯</h3>
@@ -108,10 +105,8 @@
                     Save Next Match 💾
                 </button>
             </div>
-
             <h3 class="section-header">Upcoming Matches 📅</h3>
             <div id="upcomingMatches" class="upcoming-matches"></div>
-
             <div class="admin-buttons">
                 <button type="button" class="admin-btn add-match" onclick="addMatchField()">
                     Add Match ➕
@@ -123,7 +118,7 @@
             </div>
         </form>
     </div>
-
-    <script src="{{ url_for('static', filename='admin.js') }}"></script>
+    <!-- Updated JavaScript Path -->
+    <script src="/pb/static/admin.js"></script>
 </body>
 </html>
