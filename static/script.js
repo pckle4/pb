@@ -1,23 +1,19 @@
 // Initialize SSE connection with error handling and reconnection
 function initializeSSE() {
-    const eventSource = new EventSource('/stream');
-
+    const eventSource = new EventSource('https://pb-beta-ten.vercel.app/stream');
     eventSource.onopen = () => {
         console.log('SSE connection established');
     };
-
     eventSource.addEventListener('match_update', (event) => {
         const data = JSON.parse(event.data);
         updateDisplay(data.match_data);
     });
-
     eventSource.onerror = (error) => {
         console.error('SSE Connection Error:', error);
         eventSource.close();
         // Attempt to reconnect after 5 seconds
         setTimeout(initializeSSE, 5000);
     };
-
     return eventSource;
 }
 
@@ -49,13 +45,11 @@ function updateDisplay(data) {
 function updateUpcomingList(upcoming) {
     const upcomingList = document.getElementById('upcomingList');
     upcomingList.innerHTML = '';
-
     const matchesByCourt = {1: [], 2: []};
     upcoming.forEach(match => {
         const court = match.court || '1';
         matchesByCourt[court].push(match);
     });
-
     for (const [courtNumber, matches] of Object.entries(matchesByCourt)) {
         if (matches.length > 0) {
             const section = document.createElement('div');
@@ -64,7 +58,6 @@ function updateUpcomingList(upcoming) {
                 <div class="court-number">Court ${courtNumber}</div>
                 <ul class="match-list"></ul>
             `;
-
             const list = section.querySelector('.match-list');
             matches.forEach(match => {
                 const li = document.createElement('li');
@@ -83,7 +76,7 @@ function updateUpcomingList(upcoming) {
 // Load initial data and start SSE connection
 async function initialize() {
     try {
-        const response = await fetch('/api/match-data');
+        const response = await fetch('https://pb-beta-ten.vercel.app/api/match-data');
         if (!response.ok) {
             throw new Error('Failed to load initial data');
         }
@@ -92,7 +85,6 @@ async function initialize() {
     } catch (error) {
         console.error('Error loading initial data:', error);
     }
-
     // Initialize SSE connection
     initializeSSE();
 }
