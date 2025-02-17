@@ -3,122 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Pickleball Match Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comic+Neue&family=Luckiest+Guy&family=Poppins&family=Rubik+Bubbles&family=Shadows+Into+Light&display=swap" rel="stylesheet">
-    <!-- Updated CSS Path -->
-    <link rel="stylesheet" href="/pb/static/style.css">
+    <title>Pickleball Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="admin-panel show">
-        <div class="admin-header">🎾 Admin Controls</div>
-        <!-- Team Management Section -->
-        <div class="team-management">
-            <h3>Team Management</h3>
-            <div class="team-input-group">
-                <input type="text" id="newTeamInput" placeholder="Enter team name" class="team-input">
-                <button type="button" onclick="addTeam()" class="admin-btn">Add Team ➕</button>
-            </div>
-            <div class="team-list">
-                <h4>Current Teams</h4>
-                <div id="teamsList" class="teams-grid"></div>
-            </div>
+    <div class="container">
+        <h1>Pickleball Match Tracker - Admin Panel</h1>
+
+        <!-- Add Team Section -->
+        <div class="section">
+            <h2>Add Team</h2>
+            <input type="text" id="newTeamInput" placeholder="Enter team name">
+            <button onclick="addTeam()">Add Team</button>
         </div>
-        <form class="admin-form" id="matchForm">
-            <!-- Court 1 Controls -->
-            <div class="court-control" data-court="1">
-                <h3 class="court-header">Court 1 🏸</h3>
-                <div class="form-group">
-                    <label>Team 1</label>
-                    <select id="court1team1" required class="team-select">
-                        <option value="">Select Team</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Team 2</label>
-                    <select id="court1team2" required class="team-select">
-                        <option value="">Select Team</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Serving Team</label>
-                    <select id="court1servingTeam">
-                        <option value="team1">Team 1</option>
-                        <option value="team2">Team 2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Match Status</label>
-                    <select id="court1status" class="match-status">
-                        <option value="paused">Paused</option>
-                        <option value="live">Live</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <button type="button" onclick="saveCourtData(1)" class="admin-btn court-save">
-                    Save Court 1 💾
-                </button>
+
+        <!-- Teams List -->
+        <div class="section">
+            <h2>Teams</h2>
+            <div id="teamsList"></div>
+        </div>
+
+        <!-- Match Form -->
+        <form id="matchForm">
+            <h2>Match Data</h2>
+
+            <!-- Court 1 -->
+            <div class="court-section" data-court="1">
+                <h3>Court 1</h3>
+                <label>Team 1:</label>
+                <select id="court1team1" class="team-select"></select>
+                <label>Team 2:</label>
+                <select id="court1team2" class="team-select"></select>
+                <label>Serving Team:</label>
+                <select id="court1servingTeam">
+                    <option value="team1">Team 1</option>
+                    <option value="team2">Team 2</option>
+                </select>
+                <label>Status:</label>
+                <select id="court1status">
+                    <option value="paused">Paused</option>
+                    <option value="playing">Playing</option>
+                </select>
+                <button class="court-save" data-court="1">Save Court 1</button>
             </div>
-            <!-- Court 2 Controls -->
-            <div class="court-control" data-court="2">
-                <h3 class="court-header">Court 2 🏸</h3>
-                <div class="form-group">
-                    <label>Team 1</label>
-                    <select id="court2team1" required class="team-select">
-                        <option value="">Select Team</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Team 2</label>
-                    <select id="court2team2" required class="team-select">
-                        <option value="">Select Team</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Serving Team</label>
-                    <select id="court2servingTeam">
-                        <option value="team1">Team 1</option>
-                        <option value="team2">Team 2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Match Status</label>
-                    <select id="court2status" class="match-status">
-                        <option value="paused">Paused</option>
-                        <option value="live">Live</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <button type="button" onclick="saveCourtData(2)" class="admin-btn court-save">
-                    Save Court 2 💾
-                </button>
+
+            <!-- Court 2 -->
+            <div class="court-section" data-court="2">
+                <h3>Court 2</h3>
+                <label>Team 1:</label>
+                <select id="court2team1" class="team-select"></select>
+                <label>Team 2:</label>
+                <select id="court2team2" class="team-select"></select>
+                <label>Serving Team:</label>
+                <select id="court2servingTeam">
+                    <option value="team1">Team 1</option>
+                    <option value="team2">Team 2</option>
+                </select>
+                <label>Status:</label>
+                <select id="court2status">
+                    <option value="paused">Paused</option>
+                    <option value="playing">Playing</option>
+                </select>
+                <button class="court-save" data-court="2">Save Court 2</button>
             </div>
-            <!-- Next Match Section -->
+
+            <!-- Next Match -->
             <div class="next-match-section">
-                <h3 class="section-header">Next Match 🎯</h3>
-                <div class="form-group">
-                    <label>Select Next Match</label>
-                    <select id="nextMatch" class="team-select">
-                        <option value="">Select Teams</option>
-                    </select>
-                </div>
-                <button type="button" onclick="saveNextMatch()" class="admin-btn next-match-save">
-                    Save Next Match 💾
-                </button>
+                <h3>Next Match</h3>
+                <select id="nextMatch"></select>
+                <button class="next-match-save">Save Next Match</button>
             </div>
-            <h3 class="section-header">Upcoming Matches 📅</h3>
-            <div id="upcomingMatches" class="upcoming-matches"></div>
-            <div class="admin-buttons">
-                <button type="button" class="admin-btn add-match" onclick="addMatchField()">
-                    Add Match ➕
-                </button>
-                <button type="button" class="admin-btn save-all" onclick="saveAllData()">
-                    Save All Changes 💾
-                </button>
-                <a href="/logout" class="admin-btn logout">Logout 🚪</a>
+
+            <!-- Upcoming Matches -->
+            <div class="upcoming-matches-section">
+                <h3>Upcoming Matches</h3>
+                <div id="upcomingMatches"></div>
+                <button type="button" onclick="addMatchField()">Add Match</button>
             </div>
+
+            <!-- Save All Button -->
+            <button type="submit" class="save-all">Save All</button>
         </form>
     </div>
-    <!-- Updated JavaScript Path -->
-    <script src="/pb/static/admin.js"></script>
+
+    <script src="admin.js"></script>
 </body>
 </html>
