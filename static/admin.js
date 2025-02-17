@@ -1,37 +1,10 @@
 // Team Management
 let teams = [];
 
-// Initialize SSE connection
-function initializeSSE() {
-    const eventSource = new EventSource('https://pb-beta-ten.vercel.app/stream');
-
-    eventSource.onopen = () => {
-        console.log('SSE connection established');
-    };
-
-    eventSource.addEventListener('message', (event) => {
-        try {
-            const data = JSON.parse(event.data);
-            updateAdminForm(data.match_data);
-            updateTeamSelects();
-            updateTeamsList();
-        } catch (error) {
-            console.error('Error parsing SSE data:', error);
-        }
-    });
-
-    eventSource.onerror = (error) => {
-        console.error('SSE Connection Error:', error);
-        eventSource.close();
-        // Attempt to reconnect after 5 seconds
-        setTimeout(initializeSSE, 5000);
-    };
-}
-
 // Load Teams
 async function loadTeams() {
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/teams');
+        const response = await fetch('/api/teams');
         const data = await response.json();
         teams = data;
         updateTeamSelects();
@@ -43,6 +16,7 @@ async function loadTeams() {
 
 // Update Team Select Dropdowns
 function updateTeamSelects() {
+    // Update all team select dropdowns
     document.querySelectorAll('.team-select').forEach(select => {
         const currentValue = select.value;
         select.innerHTML = '<option value="">Select Team</option>';
@@ -94,7 +68,7 @@ async function addTeam() {
     if (!teamName) return;
 
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/teams', {
+        const response = await fetch('/api/teams', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -122,7 +96,7 @@ async function deleteTeam(team) {
     if (!confirm(`Are you sure you want to delete team "${team}"?`)) return;
 
     try {
-        const response = await fetch(`https://pb-beta-ten.vercel.app/api/teams/${encodeURIComponent(team)}`, {
+        const response = await fetch(`/api/teams/${encodeURIComponent(team)}`, {
             method: 'DELETE',
         });
 
@@ -203,7 +177,7 @@ async function saveCourtData(courtNumber) {
     };
 
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
+        const response = await fetch('/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -231,7 +205,7 @@ async function saveNextMatch() {
     const nextMatch = document.getElementById('nextMatch').value;
 
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
+        const response = await fetch('/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -257,7 +231,7 @@ async function saveNextMatch() {
 async function saveAllData() {
     const btn = document.querySelector('.save-all');
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/update-match', {
+        const response = await fetch('/api/update-match', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -306,7 +280,7 @@ function showErrorFeedback(button) {
 // Load Initial Data
 async function loadInitialData() {
     try {
-        const response = await fetch('https://pb-beta-ten.vercel.app/api/match-data');
+        const response = await fetch('/api/match-data');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         updateAdminForm(data.match_data);
@@ -383,9 +357,6 @@ window.addEventListener('load', loadInitialData);
 
 // Load teams on load
 window.addEventListener('load', loadTeams);
-
-// Initialize SSE connection
-window.addEventListener('load', initializeSSE);
 
 function getRandomTeamColor() {
     const colors = ['#FF6B6B30', '#4ECDC430', '#FFE66D30', '#FF9F1C30', '#9B59B630'];
