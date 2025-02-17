@@ -5,6 +5,7 @@ let teams = [];
 async function loadTeams() {
     try {
         const response = await fetch('/api/teams');
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         teams = data;
         updateTeamSelects();
