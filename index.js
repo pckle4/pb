@@ -13,6 +13,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type']
 }));
+app.options('*', cors()); // Handle preflight requests
 app.use(bodyParser.json());
 
 // Paths to data files
