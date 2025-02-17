@@ -1,0 +1,16 @@
+{
+    "court1": {
+        "team1": "",
+        "team2": "",
+        "servingTeam": "team1",
+        "status": "paused"
+    },
+    "court2": {
+        "team1": "",
+        "team2": "",
+        "servingTeam": "team1",
+        "status": "paused"
+    },
+    "nextMatch": "",
+    "upcoming": []
+}
