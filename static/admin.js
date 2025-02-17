@@ -1,6 +1,34 @@
 // Team Management
 let teams = [];
 
+// Initialize SSE connection
+function initializeSSE() {
+    const eventSource = new EventSource('https://pb-beta-ten.vercel.app/stream');
+
+    eventSource.onopen = () => {
+        console.log('SSE connection established');
+    };
+
+    eventSource.addEventListener('message', (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            updateAdminForm(data.match_data);
+            updateTeamSelects();
+            updateTeamsList();
+        } catch (error) {
+            console.error('Error parsing SSE data:', error);
+        }
+    });
+
+    eventSource.onerror = (error) => {
+        console.error('SSE Connection Error:', error);
+        eventSource.close();
+        // Attempt to reconnect after 5 seconds
+        setTimeout(initializeSSE, 5000);
+    };
+}
+
+// Load Teams
 async function loadTeams() {
     try {
         const response = await fetch('https://pb-beta-ten.vercel.app/api/teams');
@@ -13,8 +41,8 @@ async function loadTeams() {
     }
 }
 
+// Update Team Select Dropdowns
 function updateTeamSelects() {
-    // Update all team select dropdowns
     document.querySelectorAll('.team-select').forEach(select => {
         const currentValue = select.value;
         select.innerHTML = '<option value="">Select Team</option>';
@@ -44,6 +72,7 @@ function updateTeamSelects() {
     });
 }
 
+// Update Teams List
 function updateTeamsList() {
     const teamsList = document.getElementById('teamsList');
     teamsList.innerHTML = '';
@@ -57,6 +86,7 @@ function updateTeamsList() {
     });
 }
 
+// Add a New Team
 async function addTeam() {
     const input = document.getElementById('newTeamInput');
     const teamName = input.value.trim();
@@ -87,6 +117,7 @@ async function addTeam() {
     }
 }
 
+// Delete a Team
 async function deleteTeam(team) {
     if (!confirm(`Are you sure you want to delete team "${team}"?`)) return;
 
@@ -110,6 +141,7 @@ async function deleteTeam(team) {
     }
 }
 
+// Add Match Field
 function addMatchField() {
     const div = document.createElement('div');
     div.className = 'match-input-group';
@@ -131,7 +163,7 @@ function addMatchField() {
     document.getElementById('upcomingMatches').appendChild(div);
 }
 
-// Get current form data
+// Get Current Form Data
 function getCurrentFormData() {
     const data = {
         court1: {
@@ -162,7 +194,7 @@ function getCurrentFormData() {
     return data;
 }
 
-// Court-specific save functionality
+// Save Court-Specific Data
 async function saveCourtData(courtNumber) {
     const btn = document.querySelector(`[data-court="${courtNumber}"] .court-save`);
     const data = getCurrentFormData();
@@ -193,6 +225,7 @@ async function saveCourtData(courtNumber) {
     }
 }
 
+// Save Next Match
 async function saveNextMatch() {
     const btn = document.querySelector('.next-match-save');
     const nextMatch = document.getElementById('nextMatch').value;
@@ -220,6 +253,7 @@ async function saveNextMatch() {
     }
 }
 
+// Save All Data
 async function saveAllData() {
     const btn = document.querySelector('.save-all');
     try {
@@ -245,6 +279,7 @@ async function saveAllData() {
     }
 }
 
+// Show Save Feedback
 function showSaveFeedback(button) {
     const originalText = button.textContent;
     button.classList.add('save-success');
@@ -256,6 +291,7 @@ function showSaveFeedback(button) {
     }, 2000);
 }
 
+// Show Error Feedback
 function showErrorFeedback(button) {
     const originalText = button.textContent;
     button.style.backgroundColor = 'var(--color1)';
@@ -267,7 +303,7 @@ function showErrorFeedback(button) {
     }, 2000);
 }
 
-// Load initial data
+// Load Initial Data
 async function loadInitialData() {
     try {
         const response = await fetch('https://pb-beta-ten.vercel.app/api/match-data');
@@ -282,6 +318,7 @@ async function loadInitialData() {
     }
 }
 
+// Update Admin Form
 function updateAdminForm(data) {
     // Court 1
     document.getElementById('court1team1').value = data.court1?.team1 || '';
@@ -346,6 +383,9 @@ window.addEventListener('load', loadInitialData);
 
 // Load teams on load
 window.addEventListener('load', loadTeams);
+
+// Initialize SSE connection
+window.addEventListener('load', initializeSSE);
 
 function getRandomTeamColor() {
     const colors = ['#FF6B6B30', '#4ECDC430', '#FFE66D30', '#FF9F1C30', '#9B59B630'];
